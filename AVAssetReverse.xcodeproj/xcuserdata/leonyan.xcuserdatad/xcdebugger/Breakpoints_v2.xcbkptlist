@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/ViewController.m"
-            timestampString = "461173926.633369"
+            timestampString = "461510303.039589"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/AVUtilities.m"
-            timestampString = "461229293.07932"
+            timestampString = "461510886.839149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "+assetByReversingAsset:outputURL:completion:"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/ViewController.m"
-            timestampString = "461174846.112267"
+            timestampString = "461510303.039589"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,12 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/AVUtilities.m"
-            timestampString = "461227737.01667"
+            timestampString = "461510568.304411"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "+assetByReversingAsset:outputURL:completion:"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -90,12 +90,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/AVUtilities.m"
-            timestampString = "461227730.976201"
+            timestampString = "461510568.304411"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "+assetByReversingAsset:outputURL:completion:"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AVAssetReverse/AVUtilities.m"
+            timestampString = "461510886.839149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/AVUtilities.m"
-            timestampString = "461229293.07932"
+            timestampString = "461510886.839149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "+assetByReversingAsset:outputURL:completion:"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,12 +138,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AVAssetReverse/AVUtilities.m"
-            timestampString = "461229199.356372"
+            timestampString = "461510918.260173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "+assetByReversingAsset:outputURL:completion:"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "+assetByReversingOfTimeRange:OfAsset:outputURL:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -4,8 +4,15 @@
 
 @implementation AVUtilities
 
+
 + (void)assetByReversingAsset:(AVAsset *)asset outputURL:(NSURL *)outputURL completion:(void (^)(void))handler {
-    
+    CMTimeRange range = CMTimeRangeMake(kCMTimeZero, asset.duration);
+    [AVUtilities assetByReversingOfTimeRange:range OfAsset:asset outputURL:outputURL completion:handler];
+}
+
+
++ (void)assetByReversingOfTimeRange:(CMTimeRange)timeRange OfAsset:(AVAsset *)asset outputURL:(NSURL *)outputURL completion:(void (^)(void))handler {
+
     NSError *error;
     AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] lastObject];
     CGSize naturalSize = videoTrack.naturalSize;
@@ -37,8 +44,14 @@
     //CMSampleBufferGetPresentationTimeStamp((__bridge CMSampleBufferRef)samples[0]);
     [writer startSessionAtSourceTime:startTime];
     
+    CMTimeRange videoTimeRange;
+    if (CMTimeRangeEqual(timeRange, videoTrack.timeRange)) {
+        videoTimeRange = videoTrack.timeRange;
+    } else {
+        videoTimeRange = timeRange;
+    }
     // Initialize the reader
-    CMTime durationTime = videoTrack.timeRange.duration;
+    CMTime durationTime = timeRange.duration;//videoTrack.timeRange.duration;
     CFTimeInterval duration = CMTimeGetSeconds(durationTime);
     CFTimeInterval clipDuration = 3.0;
     NSUInteger clipCount = ceil(duration / clipDuration);
@@ -49,13 +62,15 @@
     CMTime clipTime = CMTimeMakeWithSeconds(clipDuration, videoTrack.naturalTimeScale);
     
     NSMutableArray *timeRanges = [NSMutableArray array];
-    CMTime endTime = CMTimeRangeGetEnd(videoTrack.timeRange);
+    CMTime endTime = CMTimeRangeGetEnd(timeRange);
     for (NSUInteger i = 0; i < clipCount; i++) {
         CMTime startTime = CMTimeSubtract(endTime, clipTime);
         CMTime durationTime = clipTime;
-        if (CMTimeGetSeconds(startTime) <= 0) {
-            startTime = CMTimeMakeWithSeconds(0, timeScale);
-            durationTime = endTime;
+        if (CMTimeCompare(startTime, timeRange.start) < 0) {
+            startTime = timeRange.start;
+            
+            //startTime = CMTimeMakeWithSeconds(0, timeScale);
+            durationTime = CMTimeSubtract(endTime, startTime);
         }
         
         CMTimeRange r = CMTimeRangeMake(startTime, durationTime);

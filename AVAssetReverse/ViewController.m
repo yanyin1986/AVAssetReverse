@@ -26,9 +26,12 @@
     NSString *outPath = [path stringByAppendingPathComponent:@"video.m4v"];
     [[NSFileManager defaultManager] removeItemAtPath:outPath error:nil];
     NSURL *outURL = [NSURL fileURLWithPath:outPath];
-    [AVUtilities assetByReversingAsset:asset outputURL:outURL completion:^{
-        NSLog(@"!!!%@", outURL);
+    [AVUtilities assetByReversingOfTimeRange:CMTimeRangeMake(CMTimeMake(1, 1), CMTimeMake(2, 1)) OfAsset:asset outputURL:outURL completion:^{
+        NSLog(@"!!!!!!%@", outURL);
     }];
+//    [AVUtilities assetByReversingAsset:asset outputURL:outURL completion:^{
+//        NSLog(@"!!!%@", outURL);
+//    }];
 //    [AVUtilities assetByReversingAsset:asset outputURL:; completion:;
     
 }
