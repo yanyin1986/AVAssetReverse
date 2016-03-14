@@ -42,7 +42,7 @@
         _canceled = NO;
         _durationTime = kCMTimeInvalid;
         _writenTime = kCMTimeInvalid;
-        _appendQueue = dispatch_queue_create("appendQueue", NULL);
+        _appendQueue = dispatch_queue_create("leon.yan.avplus.appendQueue", NULL);
     }
     return self;
 }
@@ -86,66 +86,65 @@
     }
 }
 
-- (void)reverseAsynchronouslyWithCompletionHandler:(void (^)(void))handler
+- (BOOL)checkSessionStatusWithError:(NSError **)error
 {
     if (_status == AVAssetReverseSessionStatusCancelled ||
         _status == AVAssetReverseSessionStatusCompleted ||
         _status == AVAssetReverseSessionStatusFailed) {
         NSLog(@"can't reverse asset, it's finished.");
-        return;
+        return NO;
     }
     
     if (_status == AVAssetReverseSessionStatusReversing) {
         NSLog(@"it's reversing now.");
-        return;
+        return NO;
     }
     
     if ([[_asset tracksWithMediaType:AVMediaTypeVideo] count] <= 0) {
         NSLog(@"this asset has no video track");
-        _error = [NSError errorWithDomain:AVTErrorDomain
+        *error = [NSError errorWithDomain:AVTErrorDomain
                                      code:AVTErrorCodeHasNoVideoTracks
                                  userInfo:nil];
-        if (handler) {
-            handler();
-        }
-        return;
+        return NO;
     }
     
     if (_outputURL == nil) {
         NSLog(@"please set output file firt");
-        _error = [NSError errorWithDomain:AVTErrorDomain
+        *error = [NSError errorWithDomain:AVTErrorDomain
                                      code:AVTErrorCodeOutputFileNotSet
                                  userInfo:nil];
-        if (handler) {
-            handler();
-        }
-        return;
+        return NO;
     }
     
     if (_outputFileType == nil) {
         NSLog(@"please set output file firt");
-        _error = [NSError errorWithDomain:AVTErrorDomain
+        *error = [NSError errorWithDomain:AVTErrorDomain
                                      code:AVTErrorCodeOutputFileTypeNotSet
                                  userInfo:nil];
-        if (handler) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)reverseAsynchronouslyWithCompletionHandler:(void (^)(void))handler
+{
+    NSError *statusError;
+    if (![self checkSessionStatusWithError:&statusError]) {
+        if (!statusError && handler != NULL) {
+            _error = statusError;
             handler();
         }
         return;
     }
     
     NSDate *start = [NSDate new];
-    
     _status = AVAssetReverseSessionStatusWaiting;
     __block NSError *error;
     AVAssetTrack *videoTrack = [[_asset tracksWithMediaType:AVMediaTypeVideo] lastObject];
     CMTimeScale timeScale = videoTrack.naturalTimeScale;
     
     float nominalFrameRate = videoTrack.nominalFrameRate;
-    CMTime frameRate = videoTrack.minFrameDuration;
-    NSLog(@"videoSourceInfo:\n");
-    NSLog(@".nominalFrameRate => %g", nominalFrameRate);
-    NSLog(@".minFrameDuration => %g", CMTimeGetSeconds(frameRate));
-    
     // Initialize the writer
     AVAssetWriter *writer = [[AVAssetWriter alloc] initWithURL:_outputURL
                                                       fileType:_outputFileType
@@ -159,7 +158,9 @@
     [writerInput setTransform:videoTrack.preferredTransform];
     
     // Initialize an input adaptor so that we can append PixelBuffer
-    AVAssetWriterInputPixelBufferAdaptor *pixelBufferAdaptor = [[AVAssetWriterInputPixelBufferAdaptor alloc] initWithAssetWriterInput:writerInput sourcePixelBufferAttributes:nil];
+    AVAssetWriterInputPixelBufferAdaptor *pixelBufferAdaptor =
+    [[AVAssetWriterInputPixelBufferAdaptor alloc] initWithAssetWriterInput:writerInput
+                                               sourcePixelBufferAttributes:nil];
     [writer addInput:writerInput];
     [writer startWriting];
     CMTime startTime = kCMTimeZero;
@@ -178,19 +179,16 @@
         videoTimeRange = _timeRange;
     }
     // Initialize the reader
-    CMTime durationTime = videoTimeRange.duration;//videoTrack.timeRange.duration;
+    CMTime durationTime = videoTimeRange.duration;
     CFTimeInterval duration = CMTimeGetSeconds(durationTime);
     
     CGSize naturalSize = videoTrack.naturalSize;
     size_t frameSize = (naturalSize.width * naturalSize.height) * 3 / 2;
     size_t framePerSecondSize = frameSize * nominalFrameRate;
     
-    NSLog(@"----------");
-    NSLog(@"frame size       -> %zu", frameSize);
-    NSLog(@"frame per second -> %zu", framePerSecondSize);
-    
+    // here I gave a max cache memory limit,
+    // and caculate the max duration
     size_t maxSize = 1024 * 1024 * 100;
-    
     size_t maxDuration = floorl(maxSize / framePerSecondSize);
     maxDuration = MAX(1.0, maxDuration);
     
@@ -203,8 +201,7 @@
     NSLog(@"need to split reader video track to [%ld] clips", (unsigned long) clipCount);
     CMTime clipTime = CMTimeMakeWithSeconds(clipDuration, timeScale);
     
-    NSMutableArray *timeRanges = [NSMutableArray array];
-    
+    CMTimeRange *timeRanges = malloc(clipCount * sizeof(CMTimeRange));
     CMTime endTime = CMTimeRangeGetEnd(videoTimeRange);
     for (NSUInteger i = 0; i < clipCount; i++) {
         CMTime startTime = CMTimeSubtract(endTime, clipTime);
@@ -214,23 +211,19 @@
             durationTime = CMTimeSubtract(endTime, startTime);
         }
         CMTimeRange r = CMTimeRangeMake(startTime, durationTime);
-        NSLog(@"clip[%ld] =>", (unsigned long) i);
-        CMTimeRangeShow(r);
-        
-        [timeRanges addObject:[NSValue valueWithCMTimeRange:r]];
+        timeRanges[i] = r;
         endTime = startTime;
     }
     
     _status = AVAssetReverseSessionStatusReversing;
-    //
-    __block NSMutableArray *samples = [[NSMutableArray alloc] init];
+    CFMutableArrayRef samples = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     dispatch_async(_appendQueue, ^{
         for (NSUInteger i = 0; i < clipCount; i++) {
             @autoreleasepool {
                 // read
                 AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:_asset error:&error];
                 CMTime clipStartTime = CMTimeMakeWithSeconds(clipDuration * i, timeScale);
-                CMTimeRange range = [[timeRanges objectAtIndex:i] CMTimeRangeValue];
+                CMTimeRange range = timeRanges[i];
                 reader.timeRange = range;
                 NSDictionary *readerOutputSettings = [self readerSetting];
                 AVAssetReaderTrackOutput* readerOutput =
@@ -239,36 +232,24 @@
                 [reader addOutput:readerOutput];
                 [reader startReading];
                 
-                
                 CMSampleBufferRef sample;
                 while(!_canceled && (sample = [readerOutput copyNextSampleBuffer])) {
-                    [samples addObject:(__bridge id)sample];
-                    CFRelease(sample);
+                    CFArrayAppendValue(samples, sample);
                 }
-                
                 if (_canceled) {
                     break;
                 }
-                
-                
-                NSLog(@"------------");
-                NSLog(@"startToWriterClip[%ld]", (unsigned long)i);
-                CMTimeRangeShow(range);
-                
+                CFIndex count = CFArrayGetCount(samples);
                 // write
-                for(NSInteger i = 0; i < samples.count; i++) {
+                for(NSInteger i = 0; i < count; i++) {
                     // Get the presentation time for the frame
-                    CMTime presentationTime = CMSampleBufferGetPresentationTimeStamp((__bridge CMSampleBufferRef)samples[i]);
+                    CMTime presentationTime = CMSampleBufferGetPresentationTimeStamp((CMSampleBufferRef)CFArrayGetValueAtIndex(samples, i));
                     CMTime newPresentationTime = CMTimeAdd(clipStartTime, CMTimeSubtract(presentationTime, range.start));
                     // take the image/pixel buffer from tail end of the array
-                    CVPixelBufferRef imageBufferRef = CMSampleBufferGetImageBuffer((__bridge CMSampleBufferRef)samples[samples.count - i - 1]);
-                    size_t dataSize = CVPixelBufferGetDataSize(imageBufferRef);
-                    NSLog(@"data size -> %zu", dataSize);
-                    
+                    CVPixelBufferRef imageBufferRef = CMSampleBufferGetImageBuffer((CMSampleBufferRef)CFArrayGetValueAtIndex(samples, count - i - 1));
                     while (!writerInput.readyForMoreMediaData) {
                         [NSThread sleepForTimeInterval:0.05];
                     }
-                    NSLog(@"append image at %g", CMTimeGetSeconds(newPresentationTime));
                     [pixelBufferAdaptor appendPixelBuffer:imageBufferRef
                                      withPresentationTime:newPresentationTime];
                     _writenTime = newPresentationTime;
@@ -276,14 +257,24 @@
                         break;
                     }
                 }
-                [samples removeAllObjects];
+                
+                for (CFIndex i = 0; i < count; i++) {
+                    CFRelease(CFArrayGetValueAtIndex(samples, i));
+                }
+                CFArrayRemoveAllValues(samples);
+                //[samples removeAllObjects];
             }
         }
         
+        // free timeRanges array
+        free(timeRanges);
+        CFRelease(samples);
+        //
         if (_canceled) {
             [writerInput markAsFinished];
             [writer cancelWriting];
             _status = AVAssetReverseSessionStatusCancelled;
+            
             if (handler) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
