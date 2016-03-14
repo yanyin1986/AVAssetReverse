@@ -13,10 +13,11 @@
 		F76E083D1B7CE97100127E10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76E083B1B7CE97100127E10 /* Main.storyboard */; };
 		F76E083F1B7CE97100127E10 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F76E083E1B7CE97100127E10 /* Images.xcassets */; };
 		F76E08421B7CE97100127E10 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F76E08401B7CE97100127E10 /* LaunchScreen.xib */; };
-		F76E08591B7CE98600127E10 /* AVUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F76E08581B7CE98600127E10 /* AVUtilities.m */; };
 		F76E085B1B7CE99400127E10 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76E085A1B7CE99400127E10 /* AVFoundation.framework */; };
 		F76E085F1B7CF35800127E10 /* IMG_2246.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F76E085E1B7CF35800127E10 /* IMG_2246.MOV */; };
-		F76E08611B7CF60B00127E10 /* IMG_0287.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F76E08601B7CF60B00127E10 /* IMG_0287.MOV */; };
+		F77DAC881BC874D5007CA0D7 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F77DAC871BC874D5007CA0D7 /* VideoToolbox.framework */; };
+		F78DAF691C96877000DEF513 /* AVAssetReverseSession.m in Sources */ = {isa = PBXBuildFile; fileRef = F78DAF651C96877000DEF513 /* AVAssetReverseSession.m */; };
+		F78DAF6A1C96877000DEF513 /* AVAssetToolsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F78DAF671C96877000DEF513 /* AVAssetToolsConstants.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,11 +33,14 @@
 		F76E08411B7CE97100127E10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		F76E084C1B7CE97100127E10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F76E084D1B7CE97100127E10 /* AVAssetReverseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVAssetReverseTests.m; sourceTree = "<group>"; };
-		F76E08571B7CE98600127E10 /* AVUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVUtilities.h; sourceTree = "<group>"; };
-		F76E08581B7CE98600127E10 /* AVUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilities.m; sourceTree = "<group>"; };
 		F76E085A1B7CE99400127E10 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F76E085E1B7CF35800127E10 /* IMG_2246.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_2246.MOV; sourceTree = "<group>"; };
-		F76E08601B7CF60B00127E10 /* IMG_0287.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_0287.MOV; sourceTree = "<group>"; };
+		F77DAC871BC874D5007CA0D7 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		F78DAF641C96877000DEF513 /* AVAssetReverseSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetReverseSession.h; sourceTree = "<group>"; };
+		F78DAF651C96877000DEF513 /* AVAssetReverseSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetReverseSession.m; sourceTree = "<group>"; };
+		F78DAF661C96877000DEF513 /* AVAssetToolsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetToolsConstants.h; sourceTree = "<group>"; };
+		F78DAF671C96877000DEF513 /* AVAssetToolsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetToolsConstants.m; sourceTree = "<group>"; };
+		F78DAF681C96877000DEF513 /* AVAssetToolsMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetToolsMacros.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F77DAC881BC874D5007CA0D7 /* VideoToolbox.framework in Frameworks */,
 				F76E085B1B7CE99400127E10 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,6 +59,7 @@
 		F76E08251B7CE97100127E10 = {
 			isa = PBXGroup;
 			children = (
+				F77DAC871BC874D5007CA0D7 /* VideoToolbox.framework */,
 				F76E085A1B7CE99400127E10 /* AVFoundation.framework */,
 				F76E08301B7CE97100127E10 /* AVAssetReverse */,
 				F76E084A1B7CE97100127E10 /* AVAssetReverseTests */,
@@ -72,15 +78,17 @@
 		F76E08301B7CE97100127E10 /* AVAssetReverse */ = {
 			isa = PBXGroup;
 			children = (
+				F78DAF641C96877000DEF513 /* AVAssetReverseSession.h */,
+				F78DAF651C96877000DEF513 /* AVAssetReverseSession.m */,
+				F78DAF661C96877000DEF513 /* AVAssetToolsConstants.h */,
+				F78DAF671C96877000DEF513 /* AVAssetToolsConstants.m */,
+				F78DAF681C96877000DEF513 /* AVAssetToolsMacros.h */,
 				F76E08351B7CE97100127E10 /* AppDelegate.h */,
 				F76E08361B7CE97100127E10 /* AppDelegate.m */,
 				F76E08381B7CE97100127E10 /* ViewController.h */,
 				F76E08391B7CE97100127E10 /* ViewController.m */,
-				F76E08571B7CE98600127E10 /* AVUtilities.h */,
-				F76E08581B7CE98600127E10 /* AVUtilities.m */,
 				F76E083B1B7CE97100127E10 /* Main.storyboard */,
 				F76E085E1B7CF35800127E10 /* IMG_2246.MOV */,
-				F76E08601B7CF60B00127E10 /* IMG_0287.MOV */,
 				F76E083E1B7CE97100127E10 /* Images.xcassets */,
 				F76E08401B7CE97100127E10 /* LaunchScreen.xib */,
 				F76E08311B7CE97100127E10 /* Supporting Files */,
@@ -174,7 +182,6 @@
 				F76E083D1B7CE97100127E10 /* Main.storyboard in Resources */,
 				F76E085F1B7CF35800127E10 /* IMG_2246.MOV in Resources */,
 				F76E08421B7CE97100127E10 /* LaunchScreen.xib in Resources */,
-				F76E08611B7CF60B00127E10 /* IMG_0287.MOV in Resources */,
 				F76E083F1B7CE97100127E10 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -187,9 +194,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F76E083A1B7CE97100127E10 /* ViewController.m in Sources */,
+				F78DAF691C96877000DEF513 /* AVAssetReverseSession.m in Sources */,
 				F76E08371B7CE97100127E10 /* AppDelegate.m in Sources */,
+				F78DAF6A1C96877000DEF513 /* AVAssetToolsConstants.m in Sources */,
 				F76E08341B7CE97100127E10 /* main.m in Sources */,
-				F76E08591B7CE98600127E10 /* AVUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +344,7 @@
 				F76E08531B7CE97100127E10 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
