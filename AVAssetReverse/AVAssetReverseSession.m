@@ -116,6 +116,14 @@
         return NO;
     }
     
+    if (![_outputURL isFileURL]) {
+        NSLog(@"please set a file URL for output URL");
+        *error = [NSError errorWithDomain:AVTErrorDomain
+                                     code:AVTErrorCodeOutputFileError
+                                 userInfo:nil];
+        return NO;
+    }
+    
     if (_outputFileType == nil) {
         NSLog(@"please set output file firt");
         *error = [NSError errorWithDomain:AVTErrorDomain
