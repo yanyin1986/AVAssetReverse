@@ -1,6 +1,6 @@
- ReleaseNote
-v1.1 - adjust the code struct. everything is changed, it's simpler to use.
-v1.0 - first version.
+# ReleaseNote
+* v1.1 - adjust the code struct. everything is changed, it's simpler to use.
+* v1.0 - first version.
 
 # AVAssetReverse
 It's a simple way to reverse a video. I did a big adjustment in last version. Just use it like AVAssetExportSession.
@@ -18,9 +18,9 @@ Here is a example:
 ```objective-c
     AVURLAsset *asset = [AVURLAsset assetWithURL:fileURL];
     AVAssetReverseSession *session = [[AVAssetReverseSession alloc] initWithAsset:asset];
-       
+
     NSURL *outputURL = ...;
-    
+
     session.outputFileType = AVFileTypeMPEG4; // special output file type
     session.outputURL = outputURL; // special output file URL
     session.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMake(1200, 600)); // special special reverse clip
